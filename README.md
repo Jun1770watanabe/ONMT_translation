@@ -56,20 +56,25 @@ txt/wmt17/test.nm
 
 ## その他プログラムについて
 ほぼ全てonmt以下にある
-デバッグには ./onmt/bin/translate* を見る必要がある場合がある．
+デバッグには `./onmt/bin/translate*` を見る必要がある場合がある．
 
 
 ＝＝＝＝＝以下，実行例＝＝＝＝＝＝＝＝＝＝＝
 
 【ソケット通信版】
+<br>
 `python .\translate_v2.py -model .\model\200326_wmt17_2000_step_500000.pt`
 
 
 【テストデータ：JESC】
+<br>
 `python .\translate.py -model .\model\200326_wmt17_2000_step_500000.pt -src .\txt\JESC\en_test.nm -tgt .\txt\JESC\test.en`
+<br>
 `python .\translate.py -model .\model\200326_wmt17_280_step_70000.pt -src .\txt\JESC\en_test.nm -tgt .\txt\JESC\test.en`
 
 
 【テストデータ：wmt17】
+<br>
 `python .\translate.py -model .\model\200326_wmt17_2000_step_500000.pt -src .\txt\wmt17\test.nm -tgt .\txt\wmt17\test.en`
+<br>
 `python .\translate.py -model .\model\200326_wmt17_280_step_70000.pt -src .\txt\wmt17\test.nm -tgt .\txt\wmt17\test.en`
