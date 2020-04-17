@@ -23,13 +23,12 @@ translate_v2.py はソケット通信に対応した翻訳プログラム．
 
 
 ## モデルについて
-./model/以下
+`model`ディレクトリ以下
 
-model/200326_wmt17_280　　wmt17データセットから280万文学習
-model/200326_wmt17_2000　wmt17データセットから2000万文学習
-model/JESC_en_blstm　　　JESCの英語（280万文）
-model/kanji_blstm　　　　JESCの日本語（280万文）
-
+|  `model/200326_wmt17_280`  |  wmt17データセットから280万文学習  |
+|  `model/200326_wmt17_2000` |  wmt17データセットから2000万文学習 |
+|  `model/JESC_en_blstm`    |  JESCの英語（280万文）  |
+|  `model/kanji_blstm`       |  JESCの日本語（280万文）  |
 
 
 ## テストデータについて
@@ -55,7 +54,7 @@ txt/wmt17/test.nm
 
 
 ## その他プログラムについて
-ほぼ全てonmt以下にある
+ほぼ全て`onmt`ディレクトリ以下にある
 デバッグには `./onmt/bin/translate*` を見る必要がある場合がある．
 
 
