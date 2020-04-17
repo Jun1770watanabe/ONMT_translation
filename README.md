@@ -1,7 +1,7 @@
-OpenNMTを用いた翻訳プログラム
+# OpenNMTを用いた翻訳プログラム
 （学習のみに関わるファイルは省いている）
 
-〇translate.pyについて
+## translate.pyについて
 -src，-tgt オプションでテキストファイル（./txt以下のテストデータ）を指定することによってファイルからの翻訳が可能．
 （-srcと-tgtの両方を指定する必要有）
 この時，data_.txtというファイルが自動生成される．
@@ -14,7 +14,7 @@ OpenNMTを用いた翻訳プログラム
 
 
 
-〇translate_v2.pyについて
+## translate_v2.pyについて
 translate_v2.py はソケット通信に対応した翻訳プログラム．
 対話形式でのみ実行可能，ファイル入出力非対応．
 （この場合，translate_v2がサーバプログラムとなる．client.pyでテスト可能．）
@@ -22,7 +22,7 @@ translate_v2.py はソケット通信に対応した翻訳プログラム．
 
 
 
-〇モデルについて
+## モデルについて
 ./model/以下
 
 model/200326_wmt17_280　　wmt17データセットから280万文学習
@@ -32,7 +32,7 @@ model/kanji_blstm　　　　JESCの日本語（280万文）
 
 
 
-〇テストデータについて
+## テストデータについて
 ./txt/以下
 拡張子に注意すること．
 
@@ -54,7 +54,7 @@ txt/wmt17/test.nm
 
 
 
-〇その他プログラムについて
+## その他プログラムについて
 ほぼ全てonmt以下にある
 デバッグには ./onmt/bin/translate* を見る必要がある場合がある．
 
@@ -62,14 +62,14 @@ txt/wmt17/test.nm
 ＝＝＝＝＝以下，実行例＝＝＝＝＝＝＝＝＝＝＝
 
 【ソケット通信版】
-python .\translate_v2.py -model .\model\200326_wmt17_2000_step_500000.pt
+`python .\translate_v2.py -model .\model\200326_wmt17_2000_step_500000.pt`
 
 
 【テストデータ：JESC】
-python .\translate.py -model .\model\200326_wmt17_2000_step_500000.pt -src .\txt\JESC\en_test.nm -tgt .\txt\JESC\test.en
-python .\translate.py -model .\model\200326_wmt17_280_step_70000.pt -src .\txt\JESC\en_test.nm -tgt .\txt\JESC\test.en
+`python .\translate.py -model .\model\200326_wmt17_2000_step_500000.pt -src .\txt\JESC\en_test.nm -tgt .\txt\JESC\test.en`
+`python .\translate.py -model .\model\200326_wmt17_280_step_70000.pt -src .\txt\JESC\en_test.nm -tgt .\txt\JESC\test.en`
 
 
 【テストデータ：wmt17】
-python .\translate.py -model .\model\200326_wmt17_2000_step_500000.pt -src .\txt\wmt17\test.nm -tgt .\txt\wmt17\test.en
-python .\translate.py -model .\model\200326_wmt17_280_step_70000.pt -src .\txt\wmt17\test.nm -tgt .\txt\wmt17\test.en
+`python .\translate.py -model .\model\200326_wmt17_2000_step_500000.pt -src .\txt\wmt17\test.nm -tgt .\txt\wmt17\test.en`
+`python .\translate.py -model .\model\200326_wmt17_280_step_70000.pt -src .\txt\wmt17\test.nm -tgt .\txt\wmt17\test.en`
