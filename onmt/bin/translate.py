@@ -15,7 +15,7 @@ from compare import Comp_words
 import numpy as np
 
 
-def translate(opt, plt):
+def translate(opt):
     ArgumentParser.validate_translate_opts(opt)
     logger = init_logger(opt.log_file)
 
@@ -63,6 +63,7 @@ def translate(opt, plt):
     acc = []
     n_max = 50
     dist = np.zeros((n_max))
+    correct_cnt = len(pred_sents)
     for i in range(len(pred_sents)):
         pre = pred_sents[i][0].split()
         ans = text[i].split()
@@ -82,12 +83,14 @@ def translate(opt, plt):
 
         # if sentences didn't match, display both.
         if cnt / n < 1:
+            correct_cnt -= 1
             print(">> No." + str(i) + " sentences didn't match !")
             print(">> estimated: " + pred_sents[i][0])
             print(">> answer:    " + text[i])
         
         acc.append((i, n, cnt / n))
         dist[len(ans)] += 1
+    print(">> correct sentences: " + str(correct_cnt) + "/" + str(len(pred_sents)))
 
     # make acc list from acc tapple
     acc_list = [[] for i in range(n_max)]
@@ -194,13 +197,13 @@ def _get_parser():
     return parser
 
 
-def main(plt):
+def main():
     parser = _get_parser()
 
     opt = parser.parse_args()
 
     if opt.src is not None:
-        translate(opt, plt)
+        translate(opt)
     else:
         Itranslate(opt)
 
