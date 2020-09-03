@@ -89,7 +89,7 @@ def Itranslate(opt):
                     # conn.send(result.encode())
                     conn.send(result_sentence.encode())
 
-        except ConnectionAbortedError:
+        except Exception:
             print(">> disconnected.")
 
 
