@@ -11,6 +11,7 @@ import onmt.opts as opts
 from onmt.utils.parse import ArgumentParser
 
 from tenkey_filter_V2 import KeyinputFilter
+from compare import Comp_words
 import numpy as np
 
 
@@ -19,7 +20,28 @@ def translate(opt):
     logger = init_logger(opt.log_file)
 
     translator = build_translator(opt, report_score=True)
-    src_shards = split_corpus(opt.src, opt.shard_size)
+
+    with open(opt.src, encoding="utf-8") as f:
+        text = f.readlines()
+
+    # Misspelling Correction System
+    print(">> proccessing MCS ...")
+    nw_list = []
+    for line in text:
+        sentence = []
+        for w in line.split(" "):
+            sentence.append(Comp_words(w))
+        nw_list.append(" ".join(sentence))
+    test_sentence = "\n".join(nw_list)
+
+    temp = "txt/test_temp.nm"
+    with open(temp, 'w', encoding="utf-8") as f:
+        f.write(test_sentence) 
+
+    print(">> translating ...")
+    src_shards = split_corpus(temp, opt.shard_size)
+
+    # src_shards = split_corpus(temp, opt.shard_size)
     tgt_shards = split_corpus(opt.tgt, opt.shard_size)
     shard_pairs = zip(src_shards, tgt_shards)
 
@@ -99,7 +121,7 @@ def save_data_as_list(d1, d2, d3, d4):
 def check_quit(text):
     text = text.lower()
     if text == "quit":
-        print(">> Exit the program.")
+        print(">> Exit this program.")
         print(">> bye.")
         exit()
 
@@ -132,6 +154,14 @@ def Itranslate(opt):
         test_sentence = test_sentence.replace('5', ' ')
         if test_sentence == "":
             continue
+
+        # Misspelling Correction System
+        nw_list = []
+        print(test_sentence)
+        for w in test_sentence.split(" "):
+            nw_list.append(Comp_words(w))
+        test_sentence = " ".join(nw_list)
+        print(test_sentence)
 
         with open(temp, 'w', encoding="utf-8") as f:
             f.write(test_sentence)
