@@ -21,11 +21,11 @@ def translate(opt):
 
     translator = build_translator(opt, report_score=True)
 
-    with open(opt.src, encoding="utf-8") as f:
-        text = f.readlines()
 
     # Misspelling Correction System
     print(">> proccessing MCS ...")
+    with open(opt.src, encoding="utf-8") as f:
+        text = f.readlines()
     nw_list = []
     for line in text:
         sentence = []
@@ -39,9 +39,9 @@ def translate(opt):
         f.write(test_sentence) 
 
     print(">> translating ...")
-    src_shards = split_corpus(temp, opt.shard_size)
+    # src_shards = split_corpus(temp, opt.shard_size) # using MCS
+    src_shards = split_corpus(opt.src, opt.shard_size) # without MCS
 
-    # src_shards = split_corpus(temp, opt.shard_size)
     tgt_shards = split_corpus(opt.tgt, opt.shard_size)
     shard_pairs = zip(src_shards, tgt_shards)
 

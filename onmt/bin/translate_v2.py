@@ -51,7 +51,7 @@ def Itranslate(opt):
                     conn.send("\n>> please input test sentence.".encode())
                     data = conn.recv(size)
                     test_sentence = data.decode()
-                    print(test_sentence)
+                    # print(test_sentence)
 
                     # alphabet to num
                     test_sentence = KeyinputFilter.alphab2num(test_sentence)

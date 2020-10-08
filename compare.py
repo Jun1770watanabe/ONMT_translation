@@ -15,6 +15,6 @@ def Comp_words(word):
     # print(Dist)
     return word_c
 
-str = "21417133"
-print(Comp_words(str))
+# str = "21417133"
+# print(Comp_words(str))
 
