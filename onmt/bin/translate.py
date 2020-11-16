@@ -11,7 +11,7 @@ import onmt.opts as opts
 from onmt.utils.parse import ArgumentParser
 
 from tenkey_filter_V2 import KeyinputFilter
-from compare import Comp_words
+# from MCS import Comp_words
 import numpy as np
 
 
@@ -22,21 +22,21 @@ def translate(opt):
     translator = build_translator(opt, report_score=True)
 
 
-    # Misspelling Correction System
-    print(">> proccessing MCS ...")
-    with open(opt.src, encoding="utf-8") as f:
-        text = f.readlines()
-    nw_list = []
-    for line in text:
-        sentence = []
-        for w in line.split(" "):
-            sentence.append(Comp_words(w))
-        nw_list.append(" ".join(sentence))
-    test_sentence = "\n".join(nw_list)
+    # # Misspelling Correction System
+    # print(">> proccessing MCS ...")
+    # with open(opt.src, encoding="utf-8") as f:
+    #     text = f.readlines()
+    # nw_list = []
+    # for line in text:
+    #     sentence = []
+    #     for w in line.split(" "):
+    #         sentence.append(Comp_words(w))
+    #     nw_list.append(" ".join(sentence))
+    # test_sentence = "\n".join(nw_list)
 
-    temp = "txt/test_temp.nm"
-    with open(temp, 'w', encoding="utf-8") as f:
-        f.write(test_sentence) 
+    # temp = "txt/test_temp.nm"
+    # with open(temp, 'w', encoding="utf-8") as f:
+    #     f.write(test_sentence) 
 
     print(">> translating ...")
     # src_shards = split_corpus(temp, opt.shard_size) # using MCS
@@ -155,13 +155,13 @@ def Itranslate(opt):
         if test_sentence == "":
             continue
 
-        # Misspelling Correction System
-        nw_list = []
-        print(test_sentence)
-        for w in test_sentence.split(" "):
-            nw_list.append(Comp_words(w))
-        test_sentence = " ".join(nw_list)
-        print(test_sentence)
+        # # Misspelling Correction System
+        # nw_list = []
+        # print(test_sentence)
+        # for w in test_sentence.split(" "):
+        #     nw_list.append(Comp_words(w))
+        # test_sentence = " ".join(nw_list)
+        # print(test_sentence)
 
         with open(temp, 'w', encoding="utf-8") as f:
             f.write(test_sentence)
