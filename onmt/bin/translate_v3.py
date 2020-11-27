@@ -120,7 +120,9 @@ def Itranslate(opt):
     print("$$$      please input \"quit\"     $$$")
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
+    temp = "txt/I_input.al"
     translator = build_translator(opt, report_score=False)
+
     while True:
         print(">> please input test sentence.")
         test_sentence = input()
@@ -137,7 +139,10 @@ def Itranslate(opt):
         # split character base
         test_sentence = " ".join(list(test_sentence))
 
-        src_shards = split_corpus(test_sentence, opt.shard_size)
+        with open(temp, 'w', encoding="utf-8") as f:
+            f.write(test_sentence)
+
+        src_shards = split_corpus(temp, opt.shard_size)
         tgt_shards = split_corpus(opt.tgt, opt.shard_size)
         shard_pairs = zip(src_shards, tgt_shards)
 
