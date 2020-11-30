@@ -1,0 +1,28 @@
+from nltk.translate.bleu_score import sentence_bleu
+import argparse
+
+def argparser():
+    Argparser = argparse.ArgumentParser()
+    Argparser.add_argument("-re", '--reference', type=str, default='summaries.txt', help='Reference File')
+    Argparser.add_argument("-ca", '--candidate', type=str, default='candidates.txt', help='Candidate file')
+
+    args = Argparser.parse_args()
+    return args
+
+args = argparser()
+
+with open(args.reference, encoding="utf-8") as f:
+    reference = f.readlines()
+with open(args.candidate, encoding="utf-8") as f:
+    candidate = f.readlines()
+
+if len(reference) != len(candidate):
+    raise ValueError('The number of sentences in both files do not match.')
+
+score = 0.
+
+for i in range(len(reference)):
+    score += sentence_bleu([reference[i].strip().split()], candidate[i].strip().split())
+
+score /= len(reference)
+print("The bleu score is: "+str(score))
