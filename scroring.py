@@ -3,6 +3,7 @@ import argparse
 import re
 import pprint as pp
 import json
+
 # DP matching for word alignment
 def dp(*, ref_list, hyp_list):
     ref_list = ['sil'] + ref_list
