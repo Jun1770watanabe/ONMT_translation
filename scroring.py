@@ -29,7 +29,7 @@ def dp(*, ref_list, hyp_list):
             cur_cost = min([cost[j][i-1] + 1, cur_cost])
             # Update to the minimal cost
             cost[j][i] = cur_cost
-        #pp.pprint(cost)
+        # pp.pprint(cost)
     # Backtrace
     aligned_hyp_list = []
     aligned_ref_list = []
@@ -68,6 +68,7 @@ def dp(*, ref_list, hyp_list):
         "HYP": aligned_hyp_list,
         "ALI": aligned_eval_list
     }
+
 # Guess encoding
 def guess_charset(filename):
     _max_item = lambda d: max(d.items(), key=lambda x: x[1])[0]
@@ -92,6 +93,7 @@ def guess_charset(filename):
             if th < max(counts.values()) / sum(counts.values()):
                 break
     return _max_item(counts)
+
 def cmd_res2hyp(res_filename, target=r'sentence'):
     with open(res_filename, 'r', encoding=guess_charset(res_filename), errors='backslashreplace') as f:
         for line in f:
@@ -108,6 +110,7 @@ def cmd_res2hyp(res_filename, target=r'sentence'):
                 else:
                     print(m2.group(1), end='\n')
     return
+
 def cmd_align(hyp_filename, ref_filename, eval_target):
     # Load reference file
     ref_data = {}
@@ -136,8 +139,9 @@ def cmd_align(hyp_filename, ref_filename, eval_target):
             words = txt.rstrip().split(' ')
             hyp_data[id] = words
     # Print the aligned word sequence by DP matching (DTW)
-    for k in hyp_data.keys():
-        ali = dp(ref_list=ref_data[k], hyp_list=hyp_data[k])
+    for k in range(len(ref_data)):
+        ali = dp(ref_list=ref_data[k].split(), hyp_list=hyp_data[k].split())
+        print(ali)
         print(k)
 # by me 0_0
 # Delete element that do not relate to eval
@@ -157,6 +161,7 @@ def cmd_align(hyp_filename, ref_filename, eval_target):
         print("HYP: " + "\t| ".join(ali["HYP"]))
         print("ALI: " + "\t| ".join(map(lambda x: "{:3s}".format(x), ali["ALI"])))
         print('JSON: {"id": "' + k + '", "alignment": ' + json.dumps(ali, ensure_ascii=False) + "}")
+
 def cmd_score(ali_filename):
     # Load alignment file
     ali_data = []
@@ -184,16 +189,34 @@ def cmd_score(ali_filename):
     print("Word correct rate         : {:.1f}%".format(100.0*num["C"]/num["Words"]))
     print("Word accuray              : {:.1f}%".format(100.0*(num["C"]-num["I"])/num["Words"]))
     print("Word Error rate           : {:.1f}%".format(100.0*(num["S"]+num["D"]+num["I"])/num["Words"]))
-def _test_dp():
+
+def jun(hyp_filename, ref_filename):
+    with open(ref_filename, 'r', encoding=guess_charset(ref_filename), errors='backslashreplace') as f:
+        ref_data = f.readlines()
+    with open(hyp_filename, 'r', encoding=guess_charset(ref_filename), errors='backslashreplace') as f:
+        hyp_data = f.readlines()
+
+    acc_list = []
+    for k in range(len(ref_data)):
+        ali = dp(ref_list=ref_data[k].split(), hyp_list=hyp_data[k].split())
+        acc = 100.0*ali["ALI"].count("C") / len(ali["ALI"])
+        if acc == 0:
+            pp.pprint(ali)
+        acc_list.append(acc)
+    print(">> Average : {:.2f}%".format(sum(acc_list)/len(acc_list)))
+    return
+
+def test_dp():
     ali = dp(ref_list=['a', 'b', 'c', 'c', 'd', 'f', 'g'],
-                hyp_list=['a', 'c', 'd', 'e', 'g', 'k'])
+             hyp_list=['a', 'c', 'd', 'e', 'g', 'k'])
     print("REF: " + " | ".join(ali["REF"]))
     print("HYP: " + " | ".join(ali["HYP"]))
     print("ALI: " + " | ".join(map(lambda x: "{:3s}".format(x), ali["ALI"])))
+
 if __name__ == "__main__":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     parser = argparse.ArgumentParser(description='Julius Scoring Tool')
-    parser.add_argument('mode', help='Mode', choices=['res2hyp', 'align', 'score', '_test'])
+    parser.add_argument('mode', help='Mode', choices=['res2hyp', 'align', 'score', '_test', 'jun'])
     parser.add_argument('--res', help='Input Julius\'s result file', default="result.txt")
     parser.add_argument('--ref', help='Input Reference file', default="ref.txt")
     parser.add_argument('--hyp', help='Input Hypothesis file', default="hyp.txt")
@@ -207,5 +230,7 @@ if __name__ == "__main__":
         cmd_align(args.hyp, args.ref, args.eval)
     elif args.mode == "score":
         cmd_score(args.ali)
-    elif args.mode == "test":
-        _test_dp()
+    elif args.mode == "_test":
+        test_dp()
+    elif args.mode == "jun":
+        jun(args.hyp, args.ref)
