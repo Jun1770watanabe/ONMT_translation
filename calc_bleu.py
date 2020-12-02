@@ -21,8 +21,13 @@ if len(reference) != len(candidate):
 
 score = 0.
 
+max_ngram = 18
+weights = [1./max_ngram for i in range(max_ngram)]
+
 for i in range(len(reference)):
-    score += sentence_bleu([reference[i].strip().split()], candidate[i].strip().split())
+    reference[i] = reference[i].replace(" ", "")
+    # score += sentence_bleu([reference[i].strip()], candidate[i].strip())
+    score += sentence_bleu([reference[i].strip()], candidate[i].strip(), weights)
 
 score /= len(reference)
 print("The bleu score is: "+str(score))

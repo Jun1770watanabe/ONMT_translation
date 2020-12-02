@@ -1,13 +1,28 @@
-with open(opt.tgt, encoding="utf-8") as f:
+import argparse
+import numpy as np
+
+def argparser():
+    Argparser = argparse.ArgumentParser()
+    Argparser.add_argument("-re", '--reference', type=str, default='summaries.txt', help='Reference File')
+    Argparser.add_argument("-ca", '--candidate', type=str, default='candidates.txt', help='Candidate file')
+
+    args = Argparser.parse_args()
+    return args
+
+args = argparser()    
+
+with open(args.reference, encoding="utf-8") as f:
     text = f.readlines()
+with open(args.candidate, encoding="utf-8") as f:
+    pred_sents = f.readlines()
 
 acc = []
 n_max = 50
 dist = np.zeros((n_max))
 correct_cnt = len(pred_sents)
 for i in range(len(pred_sents)):
-    pre = pred_sents[i][0].split()
-    ans = text[i].split()
+    pre = pred_sents[i].replace("\n", "").split()
+    ans = text[i].replace("\n", "").split()
     if len(ans) >= n_max:
         continue
     if len(pre) != len(ans):
@@ -26,7 +41,7 @@ for i in range(len(pred_sents)):
     if cnt / n < 1:
         correct_cnt -= 1
         print(">> No." + str(i) + " sentences didn't match !")
-        print(">> estimated: " + pred_sents[i][0])
+        print(">> estimated: " + pred_sents[i])
         print(">> answer:    " + text[i])
     
     acc.append((i, n, cnt / n))
@@ -43,7 +58,7 @@ idx = [i for i in range(len(dist)) if dist[i] != 0]
 ave = sum(acc_list) * 100 / len(acc_list)
 print(">> average of accuracy rate: {} %".format(ave))
 
-save_data_as_list(idx, acc_list, list(np.arange(n_max)), list(dist))
+# save_data_as_list(idx, acc_list, list(np.arange(n_max)), list(dist))
 exit()
 
 
