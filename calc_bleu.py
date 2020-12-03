@@ -4,7 +4,7 @@ import argparse
 def argparser():
     Argparser = argparse.ArgumentParser()
     Argparser.add_argument("-re", '--reference', type=str, default='summaries.txt', help='Reference File')
-    Argparser.add_argument("-ca", '--candidate', type=str, default='candidates.txt', help='Candidate file')
+    Argparser.add_argument("-hy", '--hypothesis', type=str, default='hypothesis.txt', help='Hypothesis file')
 
     args = Argparser.parse_args()
     return args
@@ -13,21 +13,21 @@ args = argparser()
 
 with open(args.reference, encoding="utf-8") as f:
     reference = f.readlines()
-with open(args.candidate, encoding="utf-8") as f:
-    candidate = f.readlines()
+with open(args.hypothesis, encoding="utf-8") as f:
+    hypothesis = f.readlines()
 
-if len(reference) != len(candidate):
+if len(reference) != len(hypothesis):
     raise ValueError('The number of sentences in both files do not match.')
 
 score = 0.
 
-max_ngram = 18
+max_ngram = 4
 weights = [1./max_ngram for i in range(max_ngram)]
 
 for i in range(len(reference)):
     reference[i] = reference[i].replace(" ", "")
-    # score += sentence_bleu([reference[i].strip()], candidate[i].strip())
-    score += sentence_bleu([reference[i].strip()], candidate[i].strip(), weights)
+    # score += sentence_bleu([reference[i].strip()], hypothesis[i].strip())
+    score += sentence_bleu([reference[i].strip()], hypothesis[i].strip(), weights)
 
 score /= len(reference)
 print("The bleu score is: "+str(score))
