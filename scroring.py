@@ -77,8 +77,8 @@ def calc_all(hyp_filename, ref_filename):
     for k in range(len(ref_data)):
         ali = dp(ref_list=ref_data[k].split(), hyp_list=hyp_data[k].split())
         acc = 100.0 * ali["ALI"].count("C") / len(ali["ALI"])
-        if acc == 0:
-            pp.pprint(ali)
+        # if acc == 0:
+        #     pp.pprint(ali)
         acc_list.append(acc)
     print(">> Average : {:.2f}%".format(sum(acc_list)/len(acc_list)))
     return
