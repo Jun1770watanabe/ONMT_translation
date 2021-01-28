@@ -76,26 +76,26 @@ def calc_all(hyp_filename, ref_filename):
     with open(hyp_filename, encoding="utf-8", errors='backslashreplace') as f:
         hyp_data = f.readlines()
 
-    n = len(hyp_data)
-    acc_list = []
-    dist_list = np.zeros((n))
+    n = len(ref_data)
+    acc_list = [[0,0] for i in range(n)]
     for k in range(len(ref_data)):
         ali = dp(ref_list=ref_data[k].split(), hyp_list=hyp_data[k].split())
         acc = 100.0 * ali["ALI"].count("C") / len(ali["ALI"])
         # if acc == 0:
         #     pp.pprint(ali)
-        acc_list.append(acc)
-        dist_list[len(hyp_data[k].split())] += 1
-
-    print(">> Average : {:.2f}%".format(sum(acc_list)/len(acc_list)))
+        acc_list[len(ref_data[k].split())][0] += 1
+        acc_list[len(ref_data[k].split())][1] += acc
 
     # if you want save accuracy data
-    idx = [i for i in range(n) if dist_list[i] != 0]
-    acc_list = [[] for i in range(n)]
-    for i in acc:
-        acc_list[i[1]].append(i[2])
-    acc_list = [sum(i)/len(i) for i in acc_list if len(i) != 0]
-    save_data_as_list(idx, acc_list, list(np.arange(len(dist_list))), dist_list)
+    dist_acc = [[acc_list[i][0], i, acc_list[i][1]/acc_list[i][0]] for i in range(n) if acc_list[i][0] != 0]
+    dist_acc = sorted(dist_acc, key=lambda x:x[1])
+    nos = [i[0] for i in dist_acc]
+    noc = [i[1] for i in dist_acc]
+    dist_acc = [i[2] for i in dist_acc]
+    save_data_as_list(noc, nos, noc, dist_acc)
+
+    acc_list = [i[1] for i in acc_list]
+    print(">> Average : {:.2f}%".format(sum(acc_list)/n))
 
     return
 

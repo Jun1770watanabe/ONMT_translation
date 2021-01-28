@@ -2,34 +2,34 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 
-with open("result/data_dist.pickle", "rb") as f:
-    d = pickle.load(f)
-d1 = d[0]
-d2 = d[1]
-d3 = d[2]
-d4 = d[3]
+with open("result/acc_dist_rcjj.pickle", "rb") as f:
+    d1 = pickle.load(f)
+with open("result/acc_dist_tcjj.pickle", "rb") as f:
+    d2 = pickle.load(f)
 
-print(len(d1))
-print(len(d2))
 
-fig = plt.figure()
+fig = plt.figure(figsize=(14,5))
 ax1 = fig.add_subplot(111)
-t = np.linspace(0.0,10.0,1000)
-fs = 1.0
-y1 = np.sin(2.0*np.pi*fs*t)
-ln1=ax1.plot(d1, d2,'C0',label=r'$y=sin(2\pi fst)$')
-
+ax1.plot(d1[2], d1[3], color="red", marker=".", label="WAR(BLSTM-CJ-J)")
+ax1.plot(d2[2], d2[3], color="chocolate", marker=".", label="WAR(TRSF-CJ-J)")
 ax2 = ax1.twinx()
-y2 = 10.0*t + 5.0
-ln2=ax2.plot(d3, d4,'C1',label=r'$y=at+b$')
+ax2.plot(d1[0], d1[1], color="blue", marker=".", label="NoS")
 
 h1, l1 = ax1.get_legend_handles_labels()
 h2, l2 = ax2.get_legend_handles_labels()
-ax1.legend(h1+h2, l1+l2, loc='lower right')
+ax1.legend(h1+h2, l1+l2, loc='upper left', bbox_to_anchor=(1.1, 1), fontsize=18)
 
-ax1.set_xlabel('t')
-ax1.set_ylabel(r'$y=sin(2\pi fst)$')
+ax1.set_xlabel("Number of Characters", fontsize=20)
+ax1.set_ylabel("WAR", fontsize=20)
+# ax1.xlim()
+ax1.set_ylim(0,100)
+ax1.tick_params(labelsize=18)
+# ax1.xaxis.set_ticks(np.arange(0, 100, 10))
 ax1.grid(True)
-ax2.set_ylabel(r'$y=at+b$')
+# ax2.ylim()
+ax2.tick_params(labelsize=18)
+ax2.set_ylabel("Number of Sentences", fontsize=20)
+plt.tight_layout()
+# plt.tick_params(labelsize=13)
 plt.show()
 exit()
