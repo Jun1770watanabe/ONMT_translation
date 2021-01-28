@@ -15,7 +15,6 @@ from tenkey_filter_V2 import KeyinputFilter
 import numpy as np
 import os
 
-
 def translate(opt):
     ArgumentParser.validate_translate_opts(opt)
     logger = init_logger(opt.log_file)

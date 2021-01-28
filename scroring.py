@@ -1,6 +1,9 @@
 import sys, io
 import argparse
 import pprint as pp
+import numpy as np
+import pickle
+
 
 # DP matching for word alignment
 def dp(*, ref_list, hyp_list):
@@ -73,15 +76,38 @@ def calc_all(hyp_filename, ref_filename):
     with open(hyp_filename, encoding="utf-8", errors='backslashreplace') as f:
         hyp_data = f.readlines()
 
+    n = len(hyp_data)
     acc_list = []
+    dist_list = np.zeros((n))
     for k in range(len(ref_data)):
         ali = dp(ref_list=ref_data[k].split(), hyp_list=hyp_data[k].split())
         acc = 100.0 * ali["ALI"].count("C") / len(ali["ALI"])
         # if acc == 0:
         #     pp.pprint(ali)
         acc_list.append(acc)
+        dist_list[len(hyp_data[k].split())] += 1
+
     print(">> Average : {:.2f}%".format(sum(acc_list)/len(acc_list)))
+
+    # if you want save accuracy data
+    idx = [i for i in range(n) if dist_list[i] != 0]
+    acc_list = [[] for i in range(n)]
+    for i in acc:
+        acc_list[i[1]].append(i[2])
+    acc_list = [sum(i)/len(i) for i in acc_list if len(i) != 0]
+    save_data_as_list(idx, acc_list, list(np.arange(len(dist_list))), dist_list)
+
     return
+
+def save_data_as_list(d1, d2, d3, d4):
+    d = []
+    d.append(d1)
+    d.append(d2)
+    d.append(d3)
+    d.append(d4)
+
+    with open('result/data_dist.pickle','wb') as f:
+        pickle.dump(d, f)
 
 def test_dp():
     ali = dp(ref_list=['a', 'b', 'c', 'c', 'd', 'f', 'g'],
