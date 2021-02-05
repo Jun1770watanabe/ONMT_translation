@@ -77,25 +77,29 @@ def calc_all(hyp_filename, ref_filename):
         hyp_data = f.readlines()
 
     n = len(ref_data)
+    cnt_allc = 0
     acc_list = [[0,0] for i in range(n)]
     for k in range(len(ref_data)):
         ali = dp(ref_list=ref_data[k].split(), hyp_list=hyp_data[k].split())
         acc = 100.0 * ali["ALI"].count("C") / len(ali["ALI"])
         # if acc == 0:
         #     pp.pprint(ali)
+        if acc == 100:
+            cnt_allc += 1
         acc_list[len(ref_data[k].split())][0] += 1
         acc_list[len(ref_data[k].split())][1] += acc
 
-    # if you want save accuracy data
-    dist_acc = [[acc_list[i][0], i, acc_list[i][1]/acc_list[i][0]] for i in range(n) if acc_list[i][0] != 0]
-    dist_acc = sorted(dist_acc, key=lambda x:x[1])
-    nos = [i[0] for i in dist_acc]
-    noc = [i[1] for i in dist_acc]
-    dist_acc = [i[2] for i in dist_acc]
-    save_data_as_list(noc, nos, noc, dist_acc)
+    # # if you want save accuracy data
+    # dist_acc = [[acc_list[i][0], i, acc_list[i][1]/acc_list[i][0]] for i in range(n) if acc_list[i][0] != 0]
+    # dist_acc = sorted(dist_acc, key=lambda x:x[1])
+    # nos = [i[0] for i in dist_acc]
+    # noc = [i[1] for i in dist_acc]
+    # dist_acc = [i[2] for i in dist_acc]
+    # save_data_as_list(noc, nos, noc, dist_acc)
 
     acc_list = [i[1] for i in acc_list]
     print(">> Average : {:.2f}%".format(sum(acc_list)/n))
+    print(">> {a}/{b} sentences are all correct.".format(a=cnt_allc,b=n))
 
     return
 
