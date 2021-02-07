@@ -4,22 +4,22 @@ import pickle
 
 # if plot two accuracy data with distribution
 
-with open("result/acc_dist_rwjj.pickle", "rb") as f:
+with open("result/acc_dist_rcjj.pickle", "rb") as f:
     d1 = pickle.load(f)
-with open("result/acc_dist_twjj.pickle", "rb") as f:
+with open("result/acc_dist_tcjj.pickle", "rb") as f:
     d2 = pickle.load(f)
 
 fig = plt.figure(figsize=(14,5))
 ax1 = fig.add_subplot(111)
 ax2 = ax1.twinx()
 ax1.bar(d1[0], d1[1], color="blue", label="NoS")
-ax2.plot(d1[2], d1[3], color="red", marker=".", label="SAR(B)")
-ax2.plot(d2[2], d2[3], color="chocolate", marker=".", label="SAR(T)")
+ax2.plot(d1[2], d1[3], color="red", marker=".", label="SAR(BLSTM)")
+ax2.plot(d2[2], d2[3], color="chocolate", marker=".", label="SAR(Transformer)")
 h1, l1 = ax1.get_legend_handles_labels()
 h2, l2 = ax2.get_legend_handles_labels()
-ax1.legend(h1+h2, l1+l2, loc='upper left', bbox_to_anchor=(1.1, 1), fontsize=18)
+# ax1.legend(h1+h2, l1+l2, loc='lower right', bbox_to_anchor=(1, 0), fontsize=18)
 
-ax1.set_xlabel("Number of Words", fontsize=20)
+ax1.set_xlabel("Number of Characters", fontsize=20)
 ax1.set_ylabel("Number of Sentences", fontsize=20)
 # ax1.xlim()
 ax2.set_ylim(0,100)
